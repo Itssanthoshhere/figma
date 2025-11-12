@@ -1,7 +1,7 @@
 "use client";
 
 import { fabric } from "fabric";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // import { CollaborativeApp } from "./CollaborativeApp";
 import Live from "@/components/Live";
@@ -13,6 +13,7 @@ import {
   handleResize,
   initializeFabric,
 } from "@/lib/canvas";
+import { ActiveElement } from "@/types/type";
 
 export default function Page() {
   /**
@@ -50,6 +51,22 @@ export default function Page() {
    * the component re-renders. Refs help us with that.
    */
   const selectedShapeRef = useRef<string | null>("rectangle");
+
+  /**
+   * activeElement is an object that contains the name, value and icon of the
+   * active element in the navbar.
+   */
+  const [activeElement, setActiveElement] = useState<ActiveElement>({
+    name: "",
+    value: "",
+    icon: "",
+  });
+
+  const handleActiveElement = (elem: ActiveElement) => {
+    setActiveElement(elem);
+
+    selectedShapeRef.current = elem?.value as string;
+  };
 
   useEffect(() => {
     // initialize the fabric canvas
@@ -93,7 +110,10 @@ export default function Page() {
     /* <CollaborativeApp /> */
 
     <main className="h-screen overflow-hidden">
-      <Navbar />
+      <Navbar
+        activeElement={activeElement}
+        handleActiveElement={handleActiveElement}
+      />
 
       <section className="flex h-full flex-row">
         <LeftSidebar />
