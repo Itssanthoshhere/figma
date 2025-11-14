@@ -21,6 +21,7 @@ import { ActiveElement } from "@/types/type";
 import { useMutation, useRedo, useStorage, useUndo } from "@/liveblocks.config";
 import { defaultNavElement } from "@/constants";
 import { handleDelete, handleKeyDown } from "@/lib/key-events";
+import { handleImageUpload } from "@/lib/shapes";
 
 export default function Page() {
   /**
@@ -125,6 +126,16 @@ export default function Page() {
   const activeObjectRef = useRef<fabric.Object | null>(null);
 
   /**
+   * imageInputRef is a reference to the input element that we use to upload
+   * an image to the canvas.
+   *
+   * We want image upload to happen when clicked on the image item from the
+   * dropdown menu. So we're using this ref to trigger the click event on the
+   * input element when the user clicks on the image item from the dropdown.
+   */
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
+  /**
    * activeElement is an object that contains the name, value and icon of the
    * active element in the navbar.
    */
@@ -209,6 +220,23 @@ export default function Page() {
         handleDelete(fabricRef.current as any, deleteShapeFromStorage);
         // set "select" as the active element
         setActiveElement(defaultNavElement);
+        break;
+
+      // upload an image to the canvas
+      case "image":
+        // trigger the click event on the input element which opens the file dialog
+        imageInputRef.current?.click();
+        /**
+         * set drawing mode to false
+         * If the user is drawing on the canvas, we want to stop the
+         * drawing mode when clicked on the image item from the dropdown.
+         */
+        isDrawing.current = false;
+
+        if (fabricRef.current) {
+          // disable the drawing mode of canvas
+          fabricRef.current.isDrawingMode = false;
+        }
         break;
 
       default:
@@ -352,7 +380,19 @@ export default function Page() {
 
     <main className="h-screen overflow-hidden">
       <Navbar
+        imageInputRef={imageInputRef}
         activeElement={activeElement}
+        handleImageUpload={(e: any) => {
+          // prevent the default behavior of the input element
+          e.stopPropagation();
+
+          handleImageUpload({
+            file: e.target.files[0],
+            canvas: fabricRef as any,
+            shapeRef,
+            syncShapeInStorage,
+          });
+        }}
         handleActiveElement={handleActiveElement}
       />
 
