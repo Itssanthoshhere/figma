@@ -20,7 +20,7 @@
 
 <b>A fully interactive, real-time canvas-based design platform</b> built using <b>Next.js + Fabric.js + Liveblocks</b> — supporting live cursors, drawing, shapes, comments, reactions, history, and multi-user collaboration.<br/> <i>Designed to feel like Figma, built for the web.</i>
 
-  <a href="https://quick-show-ticketbooking.vercel.app/" target="_blank">
+  <a href="https://fig-pro-sandyy.vercel.app/" target="_blank">
     <img src="https://img.shields.io/badge/🚀%20Live%20Demo-brightgreen?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
   </a>
 </div>
