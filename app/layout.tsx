@@ -5,7 +5,7 @@ import "./globals.css";
 import Room from "./Room";
 
 export const metadata = {
-  title: "Figma Clone",
+  title: "FigPro",
   description:
     "A minimalist Figma clone using fabric.js and Liveblocks for realtime collaboration",
 };
